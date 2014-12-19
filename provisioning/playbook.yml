@@ -5,8 +5,8 @@
   sudo: yes
 
   roles:
+    - base
     - php
     - postgresql
     - redis
     - nginx
-    - base

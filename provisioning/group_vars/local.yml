@@ -9,3 +9,7 @@ app:
   host: larademo.app
   user: vagrant
   group: www-data
+
+base:
+  ds_mirror: http://ftp.riken.jp/Linux/ubuntu/
+  distro: trusty

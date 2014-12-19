@@ -25,3 +25,6 @@
   notify:
     - restart nginx
 
+- name: add user to www-data group
+  user: name={{ app.user }} groups={{ app.group }} state=present append=yes
+

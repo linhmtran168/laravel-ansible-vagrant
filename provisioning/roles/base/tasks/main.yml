@@ -1,4 +1,10 @@
 ---
+- name: add mirror for ubuntun
+  template: src=sources.list.j2 dest=/etc/apt/sources.list
+
+- name: copy private key for github
+  copy: content=~/.ssh/id_rsa dest=/home/vagrant/.ssh/id_rsa mode=0600
+
 - name: install necessary base packages
   apt: package={{ item }} state=latest update_cache=true
   with_items:
@@ -12,14 +18,15 @@
 - name: set default shell for vargant user to zsh
   user: name={{ app.user }} shell=/bin/zsh
 
-- name: add user to www-data group
-  user: name={{ app.user }} groups={{ app.group }} state=present append=yes
-
 - name: setup prezto
-  git: repo=git@github.com:sorin-ionescu/prezto.git dest=/home/vagrant/.zprezto accept_hostkey=true key_file=~/.ssh/id_rsa
+  git: repo=https://github.com/sorin-ionescu/prezto.git dest=/home/vagrant/.zprezto accept_hostkey=true
+  sudo: yes
+  sudo_user: vagrant
 
 - name: get linux configuration file
-  git: repo=git@github.com:linhmtran168/linux_dotfiles.git dest=/home/vagrant/dotfiles accept_hostkey=true key_file=~/.ssh/id_rsa
+  git: repo=https://github.com/linhmtran168/linux_dotfiles.git dest=/home/vagrant/dotfiles accept_hostkey=true
+  sudo: yes
+  sudo_user: vagrant
 
 - name: link zsh, tmux configurations
   file: state=link src=/home/vagrant/dotfiles/{{ item }} path=/home/vagrant/{{ item }}
