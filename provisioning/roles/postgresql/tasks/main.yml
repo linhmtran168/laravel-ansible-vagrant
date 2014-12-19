@@ -17,6 +17,8 @@
     - "postgresql-{{ postgresql.version }}"
     - "postgresql-client-{{ postgresql.version }}"
     - "postgresql-contrib-{{ postgresql.version }}"
+    - "postgresql-server-dev-{{ postgresql.version }}"
+    - libpq-dev
 
 - name: ensure PostgreSQL is running
   service: name=postgresql state=started

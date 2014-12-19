@@ -5,6 +5,11 @@
 - name: install nginx
   apt: package=nginx state=latest update_cache=true
 
+- name: disable sendfile in nginx
+  replace: dest=/etc/nginx/nginx.conf regexp='(.*)?sendfile on;(.*)?$' replace='sendfile off;'
+  notify:
+    - restart nginx
+
 - name: disable default site
   file: path=/etc/nginx/sites-enabled/default state=absent
   notify:
