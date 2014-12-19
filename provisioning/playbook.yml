@@ -1,12 +1,11 @@
 ---
 - name: Basic PHP development environement
-  hosts: local
+  hosts: all
   user: vagrant
   sudo: yes
 
   roles:
-    - system
     - php
-    - nginx
     - postgresql
     - redis
+    - nginx

@@ -1,0 +1,30 @@
+---
+- name: install PostgreSQL dependencies
+  apt: pkg={{item}} state=latest
+  with_items:
+    - python-pycurl
+    - python-psycopg2
+
+- name: add PostgreSQL repo key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: add PostgreSQL repo
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
+
+- name: install PostgreSQL
+  apt: pkg={{ item }} state=latest update_cache=true
+  with_items:
+    - "postgresql-{{ postgresql.version }}"
+    - "postgresql-client-{{ postgresql.version }}"
+    - "postgresql-contrib-{{ postgresql.version }}"
+
+- name: ensure PostgreSQL is running
+  service: name=postgresql state=started
+
+- name: create PostgreSQL user for laravel
+  postgresql_user: name={{ postgresql.user_name }} password={{ postgresql.user_password }} login_user=postgres role_attr_flags=CREATEDB,SUPERUSER
+  sudo_user: postgres
+
+- name: create postgresql database for application
+  postgresql_db: name={{ postgresql.db_name }} owner={{ postgresql.user_name }} state=present
+  sudo_user: postgres

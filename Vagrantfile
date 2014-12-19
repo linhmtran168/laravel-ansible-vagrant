@@ -20,17 +20,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure A Few VirtualBox Settings
   config.vm.provider "virtualbox" do |vb|
     vb.name = 'Larademo'
-    vb.customize ["modifyvm", :id, "--memory", settings["memory"] ||= "1024"]
-    vb.customize ["modifyvm", :id, "--cpus", settings["cpus"] ||= "1"]
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["modifyvm", :id, "--cpus", "1"]
     vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
   end
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 80, host: 8000
-  config.vm.network "forwarded_port", guest: 443, host: 44300
-  config.vm.network "forwarded_port", guest: 5432, host: 54320
+  config.vm.network "forwarded_port", guest: 80, host: 8001
+  config.vm.network "forwarded_port", guest: 443, host: 44301
+  config.vm.network "forwarded_port", guest: 5432, host: 54321
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -55,7 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision 'ansible' do |ansible|
     ansible.limit = 'local'
     ansible.playbook = 'provisioning/playbook.yml'
-    ansilbe.inventory_path = 'provisioning/hosts'
+    ansible.inventory_path = 'provisioning/hosts'
   end
 
   # Provider-specific configuration so you can fine-tune various

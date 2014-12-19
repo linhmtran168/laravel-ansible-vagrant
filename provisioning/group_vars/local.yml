@@ -1,0 +1,9 @@
+postgresql:
+  user_name: homestead
+  user_password: secret
+  db_name: homestead
+  version: 9.4
+
+app:
+  name: larademo
+  host: larademo.app
