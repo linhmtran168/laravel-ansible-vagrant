@@ -7,3 +7,5 @@ postgresql:
 app:
   name: larademo
   host: larademo.app
+  user: vagrant
+  group: www-data

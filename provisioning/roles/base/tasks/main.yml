@@ -1,0 +1,35 @@
+---
+- name: install necessary base packages
+  apt: package={{ item }} state=latest update_cache=true
+  with_items:
+    - tmux
+    - git
+    - zsh
+    - build-essential
+    - python-software-properties
+    - autojump
+
+- name: set default shell for vargant user to zsh
+  user: name={{ app.user }} shell=/bin/zsh
+
+- name: add user to www-data group
+  user: name={{ app.user }} groups={{ app.group }} state=present append=yes
+
+- name: setup prezto
+  git: repo=git@github.com:sorin-ionescu/prezto.git dest=/home/vagrant/.zprezto accept_hostkey=true key_file=~/.ssh/id_rsa
+
+- name: get linux configuration file
+  git: repo=git@github.com:linhmtran168/linux_dotfiles.git dest=/home/vagrant/dotfiles accept_hostkey=true key_file=~/.ssh/id_rsa
+
+- name: link zsh, tmux configurations
+  file: state=link src=/home/vagrant/dotfiles/{{ item }} path=/home/vagrant/{{ item }}
+  with_items:
+    - .tmux.conf
+    - .zshrc
+    - .zprofile
+    - .zpreztorc
+
+- name: link zpreztorc theme
+  file: state=link src=/home/vagrant/dotfiles/{{ item}} path=/home/vagrant/.zprezto/modules/prompt/functions/{{ item }}
+  with_items:
+    - prompt_superlinh_setup
